@@ -9,11 +9,11 @@ from .serializers import SnippetSerializer
 def snippet_list(request):
     if request.method == 'GET':
         snippets = Snippet.objects.all()
-        serializer = SnippetSerializer(data=snippets, many=True)
+        serializer = SnippetSerializer(snippets, many=True)
         return Response(serializer.data)
     
     elif request.method == 'POST':
-        serializer = SnippetSerializer(data=serializer.data)
+        serializer = SnippetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -26,7 +26,7 @@ def snippet_detail(request, pk):
     try:
         snippet = Snippet.objects.get(pk=pk)
     except Snippet.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(data={"message": "Item not found"},status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET':
         serializer = SnippetSerializer(snippet)
@@ -41,4 +41,4 @@ def snippet_detail(request, pk):
     
     elif request.method == 'DELETE':
         snippet.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={"message": "Item not found"}, status=status.HTTP_204_NO_CONTENT)

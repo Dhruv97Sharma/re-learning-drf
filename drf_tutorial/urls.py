@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from basics import views
+from snippets import views as snippetviews
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -26,5 +27,7 @@ router.register(r'groups', views.GroupViewSet)
 urlpatterns = [
     path('',include(router.urls)),
     path('api-auth/',include('rest_framework.urls', namespace='rest_framework')),
+    path('snippets/',snippetviews.snippet_list),
+    path('snippets/<int:pk>/', snippetviews.snippet_detail),
     path('admin/', admin.site.urls),
 ]
