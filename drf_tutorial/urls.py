@@ -19,15 +19,17 @@ from rest_framework import routers
 from basics import views
 from snippets import views as snippetviews
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+# router = routers.DefaultRouter()
+# router.register(r'users', views.UserViewSet)
+# router.register(r'groups', views.GroupViewSet)
 
 
 urlpatterns = [
-    path('',include(router.urls)),
+    # path('',include(router.urls)),
     path('api-auth/',include('rest_framework.urls', namespace='rest_framework')),
-    path('snippets/', snippetviews.SnippetListView.as_view()),
-    path('snippets/<int:pk>/', snippetviews.SnippetDetailView.as_view()),
+    path('snippets/', snippetviews.SnippetListAPIView.as_view()),
+    path('snippets/<int:pk>/', snippetviews.SnippetRetrieveAPIView.as_view()),
+    path('users/', snippetviews.UserList.as_view()),
+    path('users/<int:pk>/', snippetviews.UserDetail.as_view()),
     path('admin/', admin.site.urls),
 ]
