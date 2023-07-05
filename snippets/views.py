@@ -3,29 +3,34 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
+from rest_framework import renderers
 from .models import Snippet
-from .serializers import SnippetSerializer, UserSerializer
+from .serializers import SnippetSerializer, UserSerializer, UserHyperlinkedSerializer, SnippetHyperlinkedSerializer
+from .permissions import IsOwnerOrReadOnly
 
-from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.generics import (
+    GenericAPIView, ListAPIView, RetrieveAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+)
+from rest_framework.mixins import (
+    ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+)
 # Create your views here.
 
 from django.contrib.auth.models import User
 
-
 class UserList(ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserHyperlinkedSerializer
 
 
 class UserDetail(RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserHyperlinkedSerializer
 
 
 class SnippetListAPIView(ListCreateAPIView):
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
+    serializer_class = SnippetHyperlinkedSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
@@ -34,8 +39,19 @@ class SnippetListAPIView(ListCreateAPIView):
 
 class SnippetRetrieveAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = SnippetHyperlinkedSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+class SnippetHighlight(GenericAPIView):
+
+    queryset = Snippet.objects.all()
+    renderer_classes = [renderers.StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
+
 
 
 # GenericAPIView
