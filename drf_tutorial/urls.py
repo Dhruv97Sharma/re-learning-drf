@@ -19,18 +19,18 @@ from rest_framework import routers
 from basics import views
 from snippets import views as snippetviews
 
-# router = routers.DefaultRouter()
-# router.register(r'users', views.UserViewSet)
-# router.register(r'groups', views.GroupViewSet)
+router = routers.DefaultRouter()
+router.register(r'users', snippetviews.UserViewSet, basename="user")
+router.register(r'snippets', snippetviews.SnippetViewSet, basename="snippet")
 
 
 urlpatterns = [
-    # path('',include(router.urls)),
-    path('api-auth/',include('rest_framework.urls', namespace='rest_framework')),
-    path('snippets/', snippetviews.SnippetListAPIView.as_view(), name='snippet-list'),
-    path('snippets/<int:pk>/', snippetviews.SnippetRetrieveAPIView.as_view(), name='snippet-detail'),
-    path('snippets/<int:pk>/highlight/', snippetviews.SnippetHighlight.as_view(), name='snippet-highlight'),
-    path('users/', snippetviews.UserList.as_view(), name='user-list'),
-    path('users/<int:pk>/', snippetviews.UserDetail.as_view(), name='user-detail'),
-    path('admin/', admin.site.urls),
+    path('',include(router.urls)),
+    # path('api-auth/',include('rest_framework.urls', namespace='rest_framework')),
+    # path('snippets/', snippetviews.SnippetListAPIView.as_view(), name='snippet-list'),
+    # path('snippets/<int:pk>/', snippetviews.SnippetRetrieveAPIView.as_view(), name='snippet-detail'),
+    # path('snippets/<int:pk>/highlight/', snippetviews.SnippetHighlight.as_view(), name='snippet-highlight'),
+    # path('users/', snippetviews.UserList.as_view(), name='user-list'),
+    # path('users/<int:pk>/', snippetviews.UserDetail.as_view(), name='user-detail'),
+    # path('admin/', admin.site.urls),
 ]
