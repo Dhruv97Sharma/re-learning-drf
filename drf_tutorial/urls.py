@@ -32,5 +32,5 @@ urlpatterns = [
     # path('snippets/<int:pk>/highlight/', snippetviews.SnippetHighlight.as_view(), name='snippet-highlight'),
     # path('users/', snippetviews.UserList.as_view(), name='user-list'),
     # path('users/<int:pk>/', snippetviews.UserDetail.as_view(), name='user-detail'),
-    # path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 ]
